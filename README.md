@@ -1,30 +1,160 @@
-# Cow wisdom web server
+# Wisecow – Containerization & Kubernetes Deployment
 
-## Prerequisites
+A DevOps project demonstrating the containerization, deployment, and continuous integration of the **Wisecow** application using **Docker**, **Kubernetes**, **GitHub Actions**, and **TLS**.
+
+## Project Overview
+
+This project containerizes the Wisecow application and deploys it on a Kubernetes cluster (Minikube) with secure HTTPS communication. A GitHub Actions workflow automates Docker image builds and pushes to Docker Hub whenever changes are committed.
+
+## Features
+
+- Dockerized the Wisecow application
+- Kubernetes deployment using Minikube
+- Kubernetes Service and Ingress configuration
+- TLS enabled using cert-manager and self-signed certificates
+- Automated CI/CD pipeline using GitHub Actions
+- Docker image automatically built and pushed to Docker Hub
+
+## Tech Stack
+
+- Docker
+- Kubernetes (Minikube)
+- NGINX Ingress Controller
+- cert-manager
+- GitHub Actions
+- Docker Hub
+- Bash
+- Git
+
+## Project Structure
 
 ```
-sudo apt install fortune-mod cowsay -y
+.
+├── .github/
+│   └── workflows/
+│       └── ci-cd.yml
+├── k8s/
+│   ├── namespace.yaml
+│   ├── deployment.yaml
+│   ├── service.yaml
+│   ├── ingress.yaml
+│   ├── issuer.yaml
+│   └── certificate.yaml
+├── Dockerfile
+├── README.md
+├── wisecow.sh
+└── LICENSE
 ```
 
-## How to use?
+## Kubernetes Resources
 
-1. Run `./wisecow.sh`
-2. Point the browser to server port (default 4499)
+The project deploys the following Kubernetes resources:
 
-## What to expect?
-![wisecow](https://github.com/nyrahul/wisecow/assets/9133227/8d6bfde3-4a5a-480e-8d55-3fef60300d98)
+- Namespace
+- Deployment
+- Service
+- Ingress
+- TLS Certificate
+- Issuer (cert-manager)
 
-# Problem Statement
-Deploy the wisecow application as a k8s app
+## CI/CD Pipeline
 
-## Requirement
-1. Create Dockerfile for the image and corresponding k8s manifest to deploy in k8s env. The wisecow service should be exposed as k8s service.
-2. Github action for creating new image when changes are made to this repo
-3. [Challenge goal]: Enable secure TLS communication for the wisecow app.
+The GitHub Actions workflow automatically:
 
-## Expected Artifacts
-1. Github repo containing the app with corresponding dockerfile, k8s manifest, any other artifacts needed.
-2. Github repo with corresponding github action.
-3. Github repo should be kept private and the access should be enabled for following github IDs: nyrahul
+1. Checks out the repository
+2. Builds the Docker image
+3. Logs in to Docker Hub
+4. Pushes the latest Docker image
 
+Workflow Location:
 
+```
+.github/workflows/ci-cd.yml
+```
+
+## Docker Image
+
+Docker Hub Repository
+
+```
+https://hub.docker.com/r/vivek65666/wisecow
+```
+
+Pull the latest image
+
+```bash
+docker pull vivek65666/wisecow:latest
+```
+
+Run locally
+
+```bash
+docker run -p 4499:4499 vivek65666/wisecow:latest
+```
+
+## Deployment
+
+Deploy the application
+
+```bash
+kubectl apply -f k8s/
+```
+
+Verify resources
+
+```bash
+kubectl get all -n wisecow
+```
+
+## TLS Verification
+
+The application supports HTTPS using a self-signed certificate issued through cert-manager.
+
+Example:
+
+```bash
+curl -k -H "Host: wisecow.local" https://127.0.0.1
+```
+
+## Screenshots / Verification
+
+Successfully verified:
+
+- Docker image build
+- Docker image pushed to Docker Hub
+- Kubernetes deployment
+- Service exposure
+- Ingress routing
+- HTTPS/TLS communication
+- GitHub Actions workflow execution
+
+## Future Improvements
+
+- Automatic Continuous Deployment to Kubernetes
+- Production-ready TLS using Let's Encrypt
+- Helm chart support
+- Monitoring with Prometheus and Grafana
+- Kubernetes Horizontal Pod Autoscaler
+- Multi-stage Docker builds
+
+## Repository
+
+GitHub
+
+```
+https://github.com/vivek65666/wisecow
+```
+
+Docker Hub
+
+```
+https://hub.docker.com/r/vivek65666/wisecow
+```
+
+## Acknowledgements
+
+Original Wisecow application:
+
+https://github.com/nyrahul/wisecow
+
+This repository extends the original project by implementing containerization, Kubernetes deployment, TLS, and CI/CD automation.
